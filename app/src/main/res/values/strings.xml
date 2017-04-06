@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Popular Movie</string>
+    <string name="action_settings">Sort</string>
+    <string name="top_rated">Top rated</string>
+    <string name="popular">Most Popular</string>
+    <string name="connection_timeout">connection timeout</string>
+    <string name="movie_detail">Movie Detail </string>
+    <string name="censer_rating">Censer Rating: Adult </string>
+    <string name="details_activity_text">Movie Details </string>
+    <string name="title_name">title</string>
+</resources>
