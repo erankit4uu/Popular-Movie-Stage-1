@@ -73,10 +73,8 @@ public class ActivityMovieDetails extends AppCompatActivity {
                 .load(helper.base_url+helper.poster_original+mposter_path)
                 .into(miv_collapsing);
 
-//        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+helper.base_url+helper.poster_sizes+mposter_path);
     }
     private void setupWindowAnimations() {
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Slide slide = (Slide) TransitionInflater.from(this).inflateTransition(R.transition.slide);
             getWindow().setExitTransition(slide);

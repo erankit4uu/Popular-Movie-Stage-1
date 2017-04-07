@@ -1,7 +1,12 @@
 package com.example.ankitchaturvedi.girddemo;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -11,7 +16,7 @@ import android.view.View;
 import android.widget.GridView;
 import android.widget.ProgressBar;
 
-import com.example.ankitchaturvedi.girddemo.Adapter.GirdViewAdapter;
+import com.example.ankitchaturvedi.girddemo.Adapter.GridViewAdapter;
 import com.example.ankitchaturvedi.girddemo.ResponseParser.MainGridResponseParser;
 import com.example.ankitchaturvedi.girddemo.Utils.Constant;
 import com.example.ankitchaturvedi.girddemo.Utils.ServiceCall;
@@ -22,7 +27,7 @@ import org.apache.http.entity.StringEntityHC4;
 public class MainActivity extends AppCompatActivity {
 
     GridView mgv_main;
-    GirdViewAdapter mGirdViewAdapter;
+    GridViewAdapter mGridViewAdapter;
     MainGridResponseParser mMainGridResponseParser;
     ProgressBar progressBar;
 
@@ -34,14 +39,32 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
         mgv_main = (GridView) findViewById(R.id.gv_main);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
 
+        int PERMISSION = 1;
+        String[] PERMISSIONS = {Manifest.permission.INTERNET};
+
+
+        if(!CheckPermissions(this, PERMISSIONS)){
+            ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION);
+        }
+
         GridViewAsync mGridViewAsync = new GridViewAsync();
         mGridViewAsync.execute(Constant.TXT_BLANK);
 
+    }
+
+    public static boolean CheckPermissions(Context context, String... permissions) {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null && permissions != null) {
+            for (String permission : permissions) {
+                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     @Override
@@ -106,8 +129,8 @@ public class MainActivity extends AppCompatActivity {
 
                 if (mMainGridResponseParser != null) {
 
-                    mGirdViewAdapter = new GirdViewAdapter(MainActivity.this, mMainGridResponseParser);
-                    mgv_main.setAdapter(mGirdViewAdapter);
+                    mGridViewAdapter = new GridViewAdapter(MainActivity.this, mMainGridResponseParser);
+                    mgv_main.setAdapter(mGridViewAdapter);
 
                 }
             }  catch (Exception e) {
@@ -119,11 +142,8 @@ public class MainActivity extends AppCompatActivity {
 
         private String CallLoginService() {
 
-            String urls = Constant.popular_url+ Constant.api_key;
-
-
-            Log.e("", "URL IS NOW " + urls);
-            System.out.println(urls);
+            ServiceCall.sortMovie = "popular";
+            String urls = String.valueOf(ServiceCall.buildUrl(Constant.api_key));
 
             try {
 
@@ -131,15 +151,12 @@ public class MainActivity extends AppCompatActivity {
                 ServiceCall serviceCall = new ServiceCall(MainActivity.this, urls, stringEntity);
 
                 response = String.valueOf(serviceCall.request(urls));
-                System.out.println("################### Response:" + response);
-
+                Log.e("","############################### Response"+response);
 
             }  catch (Exception e) {
                 e.printStackTrace();
             }
             return response;
-
-
         }
     }
 
@@ -147,7 +164,6 @@ public class MainActivity extends AppCompatActivity {
     private class TopRatedUrlAsync extends AsyncTask<String, Void, String> {
 
         private String response = null;
-
 
         @Override
         protected void onPreExecute() {
@@ -179,8 +195,8 @@ public class MainActivity extends AppCompatActivity {
                 mMainGridResponseParser = gson.fromJson(response, MainGridResponseParser.class);
                 if (mMainGridResponseParser != null) {
 
-                    mGirdViewAdapter = new GirdViewAdapter(MainActivity.this, mMainGridResponseParser);
-                    mgv_main.setAdapter(mGirdViewAdapter);
+                    mGridViewAdapter = new GridViewAdapter(MainActivity.this, mMainGridResponseParser);
+                    mgv_main.setAdapter(mGridViewAdapter);
 
                 }
 
@@ -194,11 +210,8 @@ public class MainActivity extends AppCompatActivity {
 
         private String CallLoginService() {
 
-            String urls = Constant.top_rated_url+ Constant.api_key;
-
-
-            Log.e("", "URL IS NOW " + urls);
-            System.out.println(urls);
+            ServiceCall.sortMovie = "top_rated";
+            String urls = String.valueOf(ServiceCall.buildUrl(Constant.api_key));
 
             try {
 
@@ -206,9 +219,7 @@ public class MainActivity extends AppCompatActivity {
                 ServiceCall serviceCall = new ServiceCall(MainActivity.this, urls, stringEntity);
 
                 response = String.valueOf(serviceCall.request(urls));
-                System.out.println("################### Response:" + response);
-
-
+                Log.e("","############################### Response"+response);
             }  catch (Exception e) {
                 e.printStackTrace();
             }

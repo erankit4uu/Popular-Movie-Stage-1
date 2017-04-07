@@ -23,7 +23,6 @@
             android:layout_gravity="center"
             android:layout_marginStart="20dp"
             android:text="@string/details_activity_text"
-            android:textSize="16sp"
             android:textColor="@color/colorText"
             android:textStyle="bold" />
 
@@ -48,7 +47,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/iv_collapsing"
-        android:transitionName="@string/title_name"/>
+        android:transitionName="@string/title_name"
+        android:contentDescription="@string/app_name" />
 
     </LinearLayout>
 
@@ -134,6 +134,4 @@
 </LinearLayout>
         </LinearLayout>
     </ScrollView>
-
-
 </LinearLayout>

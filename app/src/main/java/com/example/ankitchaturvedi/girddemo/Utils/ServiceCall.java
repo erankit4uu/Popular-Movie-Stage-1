@@ -1,6 +1,8 @@
 package com.example.ankitchaturvedi.girddemo.Utils;
 
 import android.content.Context;
+import android.net.Uri;
+
 import org.apache.http.client.methods.HttpPostHC4;
 import org.apache.http.entity.StringEntityHC4;
 import java.io.BufferedReader;
@@ -8,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
@@ -20,8 +23,8 @@ public class ServiceCall {
     private StringEntityHC4 stringEntity;
     public static int status_code = 0;
     private Context mContext;
-
     private String url = "";
+    public static String sortMovie;
 
     public ServiceCall(Context context, String url, StringEntityHC4 stringEntity) {
         this.url = url;
@@ -55,5 +58,24 @@ public class ServiceCall {
             e.printStackTrace();
         }
         return strBuffer;
+    }
+
+    public static URL buildUrl(String api_key){
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme("http")
+                .authority("api.themoviedb.org")
+                .appendPath("3")
+                .appendPath("movie")
+                .appendPath(sortMovie)
+                .appendQueryParameter("api_key",api_key).build();
+
+        URL url = null;
+        try {
+            url = new URL(builder.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return url;
     }
 }
